@@ -21,7 +21,7 @@ rout.get("/" ,async (req ,res) => {
 })
 
 
-rout.post("/upload" , upload.single("fileInp") , async (req ,res) => {
+rout.post("/" , upload.single("fileInp") , async (req ,res) => {
     const {password , upFile ,nameFile} = req.body;
     const fileData = {
         path : upFile,
@@ -31,7 +31,7 @@ rout.post("/upload" , upload.single("fileInp") , async (req ,res) => {
         fileData.password = await bcrypt.hash(password , 10);
     }
     let fileInp = await File.create(fileData);
-
+    console.log(fileData);
     let temp = await File.collection.find().toArray();
     console.log("312" + upFile);
     res.render("index" , {arrFile : temp});
@@ -46,11 +46,13 @@ async function downloadFunc(req , res){
     const file = await File.findById(req.params.id)
     if (file.password != null) {
         if (req.body.password == null) {
+          console.log(req.body);
           res.render("password");
           return;
         }
-    
+        console.log("3111");
         if (!(await bcrypt.compare(req.body.password, file.password))) {
+          console.log("300");
           res.render("password", { error: true });
           return;
         }

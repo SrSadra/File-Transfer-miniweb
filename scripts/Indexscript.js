@@ -1,7 +1,7 @@
 console.log("alo");
 document.getElementById("sub").addEventListener("click" , (e) => {
     console.log("mamad");
-    fetch("upload" , {
+    fetch("/" , {
         method : "POST",
         headers : {"content-type" : "application/json"},
         body : JSON.stringify({
