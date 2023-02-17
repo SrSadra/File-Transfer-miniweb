@@ -33,7 +33,6 @@ rout.post("/" , upload.single("fileInp") , async (req ,res) => {
     let fileInp = await File.create(fileData);
     console.log(fileData);
     let temp = await File.collection.find().toArray();
-    console.log("312" + upFile);
     res.render("index" , {arrFile : temp});
 })
 
@@ -41,18 +40,13 @@ rout.route("/file/:id").post(downloadFunc).get(downloadFunc);
 
 
 async function downloadFunc(req , res){
-    console.log(req.params.id);
-    console.log("saw1");
     const file = await File.findById(req.params.id)
     if (file.password != null) {
         if (req.body.password == null) {
-          console.log(req.body);
           res.render("password");
           return;
         }
-        console.log("3111");
         if (!(await bcrypt.compare(req.body.password, file.password))) {
-          console.log("300");
           res.render("password", { error: true });
           return;
         }
@@ -61,7 +55,6 @@ async function downloadFunc(req , res){
       file.downloadCount += 1; 
       await file.save();
       console.log(file.downloadCount);
-      console.log(file.path);
       let fileLoc = path.join("./uploads" , file.originalName);
       res.download(fileLoc ,file.originalName);
 }
